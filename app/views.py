@@ -8,7 +8,7 @@ from app.utils import *
 # Create your views here.
 
 def index(request):
-    return HttpResponse("欢迎使用 简单修改")
+    return HttpResponse("欢迎使用")
 
 # for热力图
 # 获取某市全年的空气污染程度
