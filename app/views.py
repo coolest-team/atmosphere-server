@@ -131,7 +131,7 @@ def getProvincePollutedParallel(request):
     return JsonResponse({'code': 0, 'data': arrnew, 'message': '提交成功'})
 
 # for时间轴面板
-# 获取全年各省的污染等级（还没写）
+# 获取全年各省的污染等级
 def getTimeline(request):
     year = request.GET.get("year")
     path = "./province_daily_data/"
@@ -171,6 +171,3 @@ def getTimeline(request):
                         hazardous[date_to_sum(year_int, month, day) - 1] += 1
                     # arrnew.append(province_data[key])
     return JsonResponse({'code': 0, 'data': {"优": good, "良": moderate, "轻度污染": little, "中度污染": unhealthy, "重度污染": dangerous, "严重污染": hazardous}, 'message': '提交成功'})
-
-
-
