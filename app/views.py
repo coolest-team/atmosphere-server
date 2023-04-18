@@ -57,7 +57,7 @@ def getProvincePollutedHeat(request):
 
 # for平行坐标图
 # 获取某日某个省内所有市的污染程度
-def getCityPolluted(request):
+def getCityPollutedParallel(request):
     date = request.GET.get("date")
     province = request.GET.get("province")
     file_list = []
@@ -71,17 +71,35 @@ def getCityPolluted(request):
             with open(path+file, 'r') as city_file:
                 city_data = json.load(city_file)
                 for key in range(len(city_data)):
-                    # print(city_data[key]['date'])
                     if date == city_data[key]['date']:
-                        # print(file)
-                        arrnew.append(city_data[key])
+                        AQI = city_data[key]["AQI"]
+                        pm2p5 = city_data[key]["PM2.5"]
+                        pm10 = city_data[key]["PM10"]
+                        so2 = city_data[key]["SO2"]
+                        no2 = city_data[key]["NO2"]
+                        co = city_data[key]["CO"]
+                        o3 = city_data[key]["O3"]
+                        level = int(AQI//50)
+                        if level == 0:
+                            evaluate = "优"
+                        elif level == 1:
+                            evaluate = "良"
+                        elif level == 2:
+                            evaluate = "轻度污染"
+                        elif level == 3:
+                            evaluate = "中度污染"
+                        elif level == 4:
+                            evaluate = "重度污染"
+                        else:
+                            evaluate = "严重污染"
+                        arrnew.append([AQI, pm2p5, pm10, so2, no2, co, o3, evaluate])
     return JsonResponse({'code': 0, 'data': arrnew, 'message': '提交成功'})
 
 # for平行坐标图
-# 获取某日所有省的污染程度（还没写）
-def getProvincePolluted(request):
+# 获取某日全国所有省的污染程度
+def getProvincePollutedParallel(request):
     date = request.GET.get("date")
-    path = "./province_daily_data"
+    path = "./province_daily_data/"
     files = os.listdir(path)
     arrnew = []
     for file in files:
@@ -89,8 +107,28 @@ def getProvincePolluted(request):
             province_data = json.load(province_file)
             for key in range(len(province_data)):
                 if date == province_data[key]['date']:
-                    arrnew.append(province_data[key])
-    return JsonResponse({'code': 0, 'data': '', 'message': '提交成功'})
+                    AQI = province_data[key]["AQI"]
+                    pm2p5 = province_data[key]["PM2.5"]
+                    pm10 = province_data[key]["PM10"]
+                    so2 = province_data[key]["SO2"]
+                    no2 = province_data[key]["NO2"]
+                    co = province_data[key]["CO"]
+                    o3 = province_data[key]["O3"]
+                    level = int(AQI // 50)
+                    if level == 0:
+                        evaluate = "优"
+                    elif level == 1:
+                        evaluate = "良"
+                    elif level == 2:
+                        evaluate = "轻度污染"
+                    elif level == 3:
+                        evaluate = "中度污染"
+                    elif level == 4:
+                        evaluate = "重度污染"
+                    else:
+                        evaluate = "严重污染"
+                    arrnew.append([AQI, pm2p5, pm10, so2, no2, co, o3, evaluate])
+    return JsonResponse({'code': 0, 'data': arrnew, 'message': '提交成功'})
 
 # for时间轴面板
 # 获取全年各省的污染等级（还没写）
@@ -101,6 +139,7 @@ def getProvinceLevelByYear(request):
     arrnew = []
     for file in files:
         with open(path + file, 'r') as province_file:
+            print("success")
             province_data = json.load(province_file)
             for key in range(len(province_data)):
                 if year in province_data[key]['date']:

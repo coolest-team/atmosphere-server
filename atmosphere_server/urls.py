@@ -22,6 +22,7 @@ urlpatterns = [
     # path('admin/', admin.site.urls),
     path('index/', views.index),
     path('getCityPollutedHeat/', views.getCityPollutedHeat),
-    path('getProvincePollutedHeat/',views.getProvincePollutedHeat),
-    path('getCityPolluted/', views.getCityPolluted)
+    path('getProvincePollutedHeat/', views.getProvincePollutedHeat),
+    path('getCityPollutedParallel/', views.getCityPollutedParallel),
+    path('getProvincePollutedParallel/', views.getProvincePollutedParallel)
 ]
