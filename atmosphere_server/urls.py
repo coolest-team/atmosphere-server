@@ -21,6 +21,7 @@ from app import views
 urlpatterns = [
     # path('admin/', admin.site.urls),
     path('index/', views.index),
-    path('getTotalPolluted/', views.getTotalPolluted),
+    path('getCityPollutedHeat/', views.getCityPollutedHeat),
+    path('getProvincePollutedHeat/',views.getProvincePollutedHeat),
     path('getCityPolluted/', views.getCityPolluted)
 ]

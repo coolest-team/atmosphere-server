@@ -12,18 +12,47 @@ def index(request):
 
 # for热力图
 # 获取某市全年的空气污染程度
-def getTotalPolluted(request):
+def getCityPollutedHeat(request):
+    year = request.GET.get("year")
     province = request.GET.get("province")
     city = request.GET.get("city")
     arrnew = []
-    # temp_dict = json.loads("/city_daily_data/"+changeFileName(province, city))
+    ori_month = 1
     with open("./city_daily_data/"+changeFileName(province=province, city=city), 'r') as city_file:
         city_data = json.load(city_file)
-        # print(city_data)
+        temp_list = []
         for key in range(len(city_data)):
-            arrnew.append(city_data[key]['PM2.5'])
-            # print(city_data[key]['PM2.5'])
-    # return HttpResponse(arrnew)
+            if year in city_data[key]["date"]:
+                month = int(city_data[key]["date"][5:7])
+                level = int(city_data[key]['AQI'] // 50)  # 污染等级
+                if month == ori_month:
+                    temp_list.append(level)
+                else:
+                    ori_month += 1
+                    arrnew.append(temp_list)
+                    temp_list = [level]
+    return JsonResponse({'code': 0, 'data': arrnew, 'message': '提交成功'})
+
+# for热力图
+# 获取某省全年的空气污染程度
+def getProvincePollutedHeat(request):
+    year = request.GET.get("year")
+    province = request.GET.get("province")
+    arrnew = []
+    ori_month = 1
+    with open("./province_daily_data/"+changeFileName(province=province), 'r') as province_file:
+        province_data = json.load(province_file)
+        temp_list = []
+        for key in range(len(province_data)):
+            if year in province_data[key]["date"]:
+                month = int(province_data[key]["date"][5:7])
+                level = int(province_data[key]['AQI'] // 50)  # 污染等级
+                if month == ori_month:
+                    temp_list.append(level)
+                else:
+                    ori_month += 1
+                    arrnew.append(temp_list)
+                    temp_list = [level]
     return JsonResponse({'code': 0, 'data': arrnew, 'message': '提交成功'})
 
 # for平行坐标图

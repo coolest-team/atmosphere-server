@@ -2,8 +2,11 @@ import os
 
 
 # 省市名->文件名
-def changeFileName(province, city):
-    return province + '-' + city + '.json'
+def changeFileName(province, city=None):
+    if city:
+        return province + '-' + city + '.json'
+    else:
+        return province + '.json'
 
 
 def find_prefix_of_path(path, file_list, word):
