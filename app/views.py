@@ -132,20 +132,45 @@ def getProvincePollutedParallel(request):
 
 # for时间轴面板
 # 获取全年各省的污染等级（还没写）
-def getProvinceLevelByYear(request):
+def getTimeline(request):
     year = request.GET.get("year")
-    path = "./province_daily_data"
+    path = "./province_daily_data/"
     files = os.listdir(path)
     arrnew = []
+    days = 365
+    if year == "2016":
+        days = 366
+    good = [0 for n in range(days)]  # 优
+    moderate = [0 for n in range(days)]  # 良
+    little = [0 for n in range(days)]  # 轻度污染
+    unhealthy = [0 for n in range(days)]  # 重度污染
+    dangerous = [0 for n in range(days)]  # 重度污染
+    hazardous = [0 for n in range(days)]  # 严重污染
+    # print(good)
     for file in files:
         with open(path + file, 'r') as province_file:
-            print("success")
             province_data = json.load(province_file)
             for key in range(len(province_data)):
                 if year in province_data[key]['date']:
-                    # print(file)
-                    arrnew.append(province_data[key])
-    return JsonResponse({'code': 0, 'data': '', 'message': '提交成功'})
+                    year_int = int(year)
+                    month = int(province_data[key]["date"][5:7])
+                    day = int(province_data[key]["date"][8:10])
+                    AQI = province_data[key]["AQI"]
+                    level = int(AQI // 50)
+                    if level == 0:
+                        good[date_to_sum(year_int, month, day) - 1] += 1
+                    elif level == 1:
+                        moderate[date_to_sum(year_int, month, day) - 1] += 1
+                    elif level == 2:
+                        little[date_to_sum(year_int, month, day) - 1] += 1
+                    elif level == 3:
+                        unhealthy[date_to_sum(year_int, month, day) - 1] += 1
+                    elif level == 4:
+                        dangerous[date_to_sum(year_int, month, day) - 1] += 1
+                    else:
+                        hazardous[date_to_sum(year_int, month, day) - 1] += 1
+                    # arrnew.append(province_data[key])
+    return JsonResponse({'code': 0, 'data': {"优": good, "良": moderate, "轻度污染": little, "中度污染": unhealthy, "重度污染": dangerous, "严重污染": hazardous}, 'message': '提交成功'})
 
 
 
