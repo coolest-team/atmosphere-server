@@ -134,6 +134,7 @@ def getProvincePollutedParallel(request):
 # 获取全年各省的污染等级
 def getTimeline(request):
     year = request.GET.get("year")
+    date_list = date_of_a_year(int(year))
     path = "./province_daily_data/"
     files = os.listdir(path)
     arrnew = []
@@ -170,4 +171,4 @@ def getTimeline(request):
                     else:
                         hazardous[date_to_sum(year_int, month, day) - 1] += 1
                     # arrnew.append(province_data[key])
-    return JsonResponse({'code': 0, 'data': {"good": good, "moderate": moderate, "little": little, "unhealthy": unhealthy, "dangerous": dangerous, "hazardous": hazardous}, 'message': '提交成功'})
+    return JsonResponse({'code': 0, 'data': {"good": good, "moderate": moderate, "little": little, "unhealthy": unhealthy, "dangerous": dangerous, "hazardous": hazardous, "date_list": date_list}, 'message': '提交成功'})

@@ -1,4 +1,5 @@
 import os
+import calendar
 
 
 # 省市名->文件名
@@ -36,3 +37,13 @@ def date_to_sum(year, month, day):
         sum += 1
     # print("It is the {} day".format(sum))
     return sum
+
+
+# 年份—>一年的所有日期 yyyy-mm-dd
+def date_of_a_year(year):
+    date_list = []
+    for month in range(1, 13):
+        for i in range(calendar.monthrange(year, month)[1] + 1)[1:]:
+            str1 = str(year) + '-' + str("%02d" % month) + '-' + str("%02d" % i)
+            date_list.append(str1)
+    return date_list
