@@ -128,6 +128,7 @@ def getProvincePollutedParallel(request):
                     else:
                         evaluate = "严重污染"
                     arrnew.append([AQI, pm2p5, pm10, so2, no2, co, o3, evaluate])
+                    break
     return JsonResponse({'code': 0, 'data': arrnew, 'message': '提交成功'})
 
 # for时间轴面板
