@@ -170,4 +170,4 @@ def getTimeline(request):
                     else:
                         hazardous[date_to_sum(year_int, month, day) - 1] += 1
                     # arrnew.append(province_data[key])
-    return JsonResponse({'code': 0, 'data': {"优": good, "良": moderate, "轻度污染": little, "中度污染": unhealthy, "重度污染": dangerous, "严重污染": hazardous}, 'message': '提交成功'})
+    return JsonResponse({'code': 0, 'data': {"good": good, "moderate": moderate, "little": little, "unhealthy": unhealthy, "dangerous": dangerous, "hazardous": hazardous}, 'message': '提交成功'})
