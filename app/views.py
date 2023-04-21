@@ -10,6 +10,7 @@ from app.utils import *
 def index(request):
     return HttpResponse("欢迎使用")
 
+
 # for热力图
 # 获取某市全年的空气污染程度
 def getCityPollutedHeat(request):
@@ -18,7 +19,7 @@ def getCityPollutedHeat(request):
     city = request.GET.get("city")
     arrnew = []
     ori_month = 1
-    with open("./city_daily_data/"+changeFileName(province=province, city=city), 'r') as city_file:
+    with open("./city_daily_data/" + changeFileName(province=province, city=city), 'r') as city_file:
         city_data = json.load(city_file)
         temp_list = []
         for key in range(len(city_data)):
@@ -33,6 +34,7 @@ def getCityPollutedHeat(request):
                     temp_list = [level]
     return JsonResponse({'code': 0, 'data': arrnew, 'message': '提交成功'})
 
+
 # for热力图
 # 获取某省全年的空气污染程度
 def getProvincePollutedHeat(request):
@@ -40,7 +42,7 @@ def getProvincePollutedHeat(request):
     province = request.GET.get("province")
     arrnew = []
     ori_month = 1
-    with open("./province_daily_data/"+changeFileName(province=province), 'r') as province_file:
+    with open("./province_daily_data/" + changeFileName(province=province), 'r') as province_file:
         province_data = json.load(province_file)
         temp_list = []
         for key in range(len(province_data)):
@@ -55,6 +57,7 @@ def getProvincePollutedHeat(request):
                     temp_list = [level]
     return JsonResponse({'code': 0, 'data': arrnew, 'message': '提交成功'})
 
+
 # for平行坐标图
 # 获取某日某个省内所有市的污染程度
 def getCityPollutedParallel(request):
@@ -67,8 +70,8 @@ def getCityPollutedParallel(request):
     files = os.listdir(path)
     arrnew = []
     for file in files:
-        if path+file in file_list:
-            with open(path+file, 'r') as city_file:
+        if path + file in file_list:
+            with open(path + file, 'r') as city_file:
                 city_data = json.load(city_file)
                 for key in range(len(city_data)):
                     if date == city_data[key]['date']:
@@ -79,7 +82,7 @@ def getCityPollutedParallel(request):
                         no2 = city_data[key]["NO2"]
                         co = city_data[key]["CO"]
                         o3 = city_data[key]["O3"]
-                        level = int(AQI//50)
+                        level = int(AQI // 50)
                         if level == 0:
                             evaluate = "优"
                         elif level == 1:
@@ -95,6 +98,7 @@ def getCityPollutedParallel(request):
                         arrnew.append([AQI, pm2p5, pm10, so2, no2, co, o3, evaluate])
     return JsonResponse({'code': 0, 'data': arrnew, 'message': '提交成功'})
 
+
 # for平行坐标图
 # 获取某日全国所有省的污染程度
 def getProvincePollutedParallel(request):
@@ -103,7 +107,7 @@ def getProvincePollutedParallel(request):
     files = os.listdir(path)
     arrnew = []
     for file in files:
-        with open(path+file, 'r') as province_file:
+        with open(path + file, 'r') as province_file:
             province_data = json.load(province_file)
             for key in range(len(province_data)):
                 if date == province_data[key]['date']:
@@ -130,6 +134,36 @@ def getProvincePollutedParallel(request):
                     arrnew.append([AQI, pm2p5, pm10, so2, no2, co, o3, evaluate])
                     break
     return JsonResponse({'code': 0, 'data': arrnew, 'message': '提交成功'})
+
+# for仪表盘
+# 获取某日某省的污染数值
+def getProvinceGauge(request):
+    date = request.GET.get("date")
+    province = request.GET.get("province")
+    path = "./province_daily_data/"
+    files = os.listdir(path)
+    for file in files:
+        if province in file:
+            with open(path + file, 'r') as province_file:
+                province_data = json.load(province_file)
+                for key in range(len(province_data)):
+                    if date == province_data[key]['date']:
+                        AQI = province_data[key]["AQI"]
+                        pm2p5 = province_data[key]["PM2.5"]
+                        pm10 = province_data[key]["PM10"]
+                        so2 = province_data[key]["SO2"]
+                        no2 = province_data[key]["NO2"]
+                        co = province_data[key]["CO"]
+                        o3 = province_data[key]["O3"]
+                        u = province_data[key]['U']
+                        v = province_data[key]['V']
+                        temp = province_data[key]['TEMP']
+                        rh = province_data[key]['RH']
+                        psfc = province_data[key]['PSFC']
+                        arrnew = [AQI, pm2p5, pm10, so2, no2, co, o3, u, v, temp, rh, psfc]
+                        break
+    return JsonResponse({'code': 0, 'data': arrnew, 'message': '提交成功'})
+
 
 # for时间轴面板
 # 获取全年各省的污染等级
@@ -172,7 +206,11 @@ def getTimeline(request):
                     else:
                         hazardous[date_to_sum(year_int, month, day) - 1] += 1
                     # arrnew.append(province_data[key])
-    return JsonResponse({'code': 0, 'data': {"good": good, "moderate": moderate, "little": little, "unhealthy": unhealthy, "dangerous": dangerous, "hazardous": hazardous, "date_list": date_list}, 'message': '提交成功'})
+    return JsonResponse({'code': 0,
+                         'data': {"good": good, "moderate": moderate, "little": little, "unhealthy": unhealthy,
+                                  "dangerous": dangerous, "hazardous": hazardous, "date_list": date_list},
+                         'message': '提交成功'})
+
 
 # for地图
 # 获取某日全国所有省的污染程度
@@ -182,13 +220,13 @@ def getProvinceMap(request):
     files = os.listdir(path)
     arrnew = []
     for file in files:
-        if file=="黑龙江省.json":
-            name="黑龙江"
-        elif file=="内蒙古自治区.json":
-            name="内蒙古"
+        if file == "黑龙江省.json":
+            name = "黑龙江"
+        elif file == "内蒙古自治区.json":
+            name = "内蒙古"
         else:
-            name=file[0:2]
-        with open(path+file, 'r') as province_file:
+            name = file[0:2]
+        with open(path + file, 'r') as province_file:
             province_data = json.load(province_file)
             for key in range(len(province_data)):
                 if date == province_data[key]['date']:
