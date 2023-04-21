@@ -25,5 +25,6 @@ urlpatterns = [
     path('getProvincePollutedHeat/', views.getProvincePollutedHeat),
     path('getCityPollutedParallel/', views.getCityPollutedParallel),
     path('getProvincePollutedParallel/', views.getProvincePollutedParallel),
-    path('getTimeline/', views.getTimeline)
+    path('getTimeline/', views.getTimeline),
+    path('getProvinceMap/',views.getProvinceMap)
 ]

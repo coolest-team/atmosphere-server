@@ -173,3 +173,32 @@ def getTimeline(request):
                         hazardous[date_to_sum(year_int, month, day) - 1] += 1
                     # arrnew.append(province_data[key])
     return JsonResponse({'code': 0, 'data': {"good": good, "moderate": moderate, "little": little, "unhealthy": unhealthy, "dangerous": dangerous, "hazardous": hazardous, "date_list": date_list}, 'message': '提交成功'})
+
+# for地图
+# 获取某日全国所有省的污染程度
+def getProvinceMap(request):
+    date = request.GET.get("date")
+    path = "./province_daily_data/"
+    files = os.listdir(path)
+    arrnew = []
+    for file in files:
+        if file=="黑龙江省.json":
+            name="黑龙江"
+        elif file=="内蒙古自治区.json":
+            name="内蒙古"
+        else:
+            name=file[0:2]
+        with open(path+file, 'r') as province_file:
+            province_data = json.load(province_file)
+            for key in range(len(province_data)):
+                if date == province_data[key]['date']:
+                    AQI = province_data[key]["AQI"]
+                    pm2p5 = province_data[key]["PM2.5"]
+                    pm10 = province_data[key]["PM10"]
+                    so2 = province_data[key]["SO2"]
+                    no2 = province_data[key]["NO2"]
+                    co = province_data[key]["CO"]
+                    o3 = province_data[key]["O3"]
+                    arrnew.append([AQI, pm2p5, pm10, so2, no2, co, o3, name])
+                    break
+    return JsonResponse({'code': 0, 'data': arrnew, 'message': '提交成功'})
