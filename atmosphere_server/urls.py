@@ -27,5 +27,6 @@ urlpatterns = [
     path('getProvincePollutedParallel/', views.getProvincePollutedParallel),
     path('getProvinceGauge/', views.getProvinceGauge),
     path('getTimeline/', views.getTimeline),
-    path('getProvinceMap/',views.getProvinceMap)
+    path('getProvinceMap/',views.getProvinceMap),
+    path('getCityMap/',views.getCityMap)
 ]

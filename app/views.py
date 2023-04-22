@@ -240,3 +240,31 @@ def getProvinceMap(request):
                     arrnew.append([AQI, pm2p5, pm10, so2, no2, co, o3, name])
                     break
     return JsonResponse({'code': 0, 'data': arrnew, 'message': '提交成功'})
+
+# for地图
+# 获取某日某个省内所有市的污染程度
+def getCityMap(request):
+    date = request.GET.get("date")
+    province = request.GET.get("province")
+    file_list = []
+    path = "./city_daily_data/"
+    find_prefix_of_path(path=path, file_list=file_list, word=province)
+    files = os.listdir(path)
+    arrnew = []
+    for file in files:
+        if path + file in file_list:
+            name=file.split('-')[1].split('.')[0]
+            with open(path + file, 'r') as city_file:
+                city_data = json.load(city_file)
+                for key in range(len(city_data)):
+                    if date == city_data[key]['date']:
+                        AQI = city_data[key]["AQI"]
+                        pm2p5 = city_data[key]["PM2.5"]
+                        pm10 = city_data[key]["PM10"]
+                        so2 = city_data[key]["SO2"]
+                        no2 = city_data[key]["NO2"]
+                        co = city_data[key]["CO"]
+                        o3 = city_data[key]["O3"]
+                        arrnew.append([AQI, pm2p5, pm10, so2, no2, co, o3, name])
+                        break
+    return JsonResponse({'code': 0, 'data': arrnew, 'message': '提交成功'})
