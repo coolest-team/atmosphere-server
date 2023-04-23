@@ -164,6 +164,34 @@ def getProvinceGauge(request):
                         break
     return JsonResponse({'code': 0, 'data': arrnew, 'message': '提交成功'})
 
+# for仪表盘
+# 获取某日某省的污染数值
+def getCityGauge(request):
+    date = request.GET.get("date")
+    city = request.GET.get("city")
+    path = "./city_daily_data/"
+    files = os.listdir(path)
+    for file in files:
+        if city in file:
+            with open(path + file, 'r') as city_file:
+                city_data = json.load(city_file)
+                for key in range(len(city_data)):
+                    if date == city_data[key]['date']:
+                        AQI = city_data[key]["AQI"]
+                        pm2p5 = city_data[key]["PM2.5"]
+                        pm10 = city_data[key]["PM10"]
+                        so2 = city_data[key]["SO2"]
+                        no2 = city_data[key]["NO2"]
+                        co = city_data[key]["CO"]
+                        o3 = city_data[key]["O3"]
+                        u = city_data[key]['U']
+                        v = city_data[key]['V']
+                        temp = city_data[key]['TEMP']
+                        rh = city_data[key]['RH']
+                        psfc = city_data[key]['PSFC']
+                        arrnew = [AQI, pm2p5, pm10, so2, no2, co, o3, u, v, temp, rh, psfc]
+                        break
+    return JsonResponse({'code': 0, 'data': arrnew, 'message': '提交成功'})
 
 # for时间轴面板
 # 获取全年各省的污染等级
