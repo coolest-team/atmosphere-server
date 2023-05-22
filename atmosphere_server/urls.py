@@ -30,5 +30,6 @@ urlpatterns = [
     path('getCityGauge/', views.getCityGauge),
     path('getTimeline/', views.getTimeline),
     path('getProvinceMap/',views.getProvinceMap),
-    path('getCityMap/',views.getCityMap)
+    path('getCityMap/',views.getCityMap),
+    path('getPrediction/',views.getPrediction)
 ]
