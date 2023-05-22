@@ -11,6 +11,24 @@ def index(request):
     return HttpResponse("欢迎使用")
 
 
+def getWind(request):
+    year = request.GET.get("year")
+    month = request.GET.get("month")
+    day = request.GET.get("day")
+    arrnew = []
+    get_wind_of_that_day(year, month, day)
+    with open("./csv_data/u.txt", "rb+") as f:  # 打开文本
+        # f.seek(-1, os.SEEK_END)
+        # f.truncate()
+        u = f.read().decode("utf-8")  # 读取文本
+        arrnew.append(u[:-1])
+    with open("./csv_data/v.txt", "rb+") as f:  # 打开文本
+        # f.seek(-1, os.SEEK_END)
+        # f.truncate()
+        v = f.read().decode("utf-8")  # 读取文本
+        arrnew.append(v[:-1])
+    return JsonResponse({'code': 0, 'data': arrnew, 'message': '提交成功'})
+
 # for热力图
 # 获取某市全年的空气污染程度
 def getCityPollutedHeat(request):

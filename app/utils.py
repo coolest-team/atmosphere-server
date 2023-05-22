@@ -1,5 +1,7 @@
 import os
 import calendar
+import numpy as np
+from scipy.interpolate import griddata
 
 
 # 省市名->文件名
@@ -47,3 +49,21 @@ def date_of_a_year(year):
             str1 = str(year) + '-' + str("%02d" % month) + '-' + str("%02d" % i)
             date_list.append(str1)
     return date_list
+
+
+def get_wind_of_that_day(year, month, day):
+    filename = 'CN-Reanalysis-daily-' + year + month + day + '00.csv'
+    path = "./csv_data/" + year + month + '/'
+    with open(path + filename, 'r') as daily_file:
+        file = path + filename
+        u = np.loadtxt(file, skiprows=1, dtype=np.float, delimiter=",", usecols=(6,), encoding='utf-8')
+        v = np.loadtxt(file, skiprows=1, dtype=np.float, delimiter=",", usecols=(7,), encoding='utf-8')
+        lat = np.loadtxt(file, skiprows=1, dtype=np.float, delimiter=",", usecols=(11,), encoding='utf-8')
+        lon = np.loadtxt(file, skiprows=1, dtype=np.float, delimiter=",", usecols=(12,), encoding='utf-8')
+        lats, lons = np.mgrid[18.33:53.61:0.2, 73.65:135.19:0.2]
+        z = griddata((lon, lat), u, (lons, lats), method='linear')  # new
+        z = np.nan_to_num(z)
+        z2 = griddata((lon, lat), v, (lons, lats), method='linear')  # new
+        z2 = np.nan_to_num(z2)
+        np.savetxt('./csv_data/u.txt', z, fmt="%.2f", delimiter=',', newline=',')
+        np.savetxt('./csv_data/v.txt', z2, fmt="%.2f", delimiter=',', newline=',')
