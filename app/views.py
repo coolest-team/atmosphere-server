@@ -296,3 +296,26 @@ def getCityMap(request):
                         arrnew.append([AQI, pm2p5, pm10, so2, no2, co, o3, name])
                         break
     return JsonResponse({'code': 0, 'data': arrnew, 'message': '提交成功'})
+
+#for预测
+#获取各省预测值
+def getPrediction(request):
+    path = "./predict_province/"
+    files = os.listdir(path)
+    arrnew = []
+    for file in files:
+        if file == "黑龙江省.json":
+            name = "黑龙江"
+        elif file == "内蒙古自治区.json":
+            name = "内蒙古"
+        else:
+            name = file[0:2]
+        with open(path + file, 'r') as province_file:
+            province_data = json.load(province_file)
+            for key in range(len(province_data)):
+                date=province_data[key]["date"]
+                AQI = province_data[key]["AQI"]
+                pm2p5 = province_data[key]["PM25"]
+                o3 = province_data[key]["O3"]
+                arrnew.append([date,AQI, pm2p5, o3, name])
+    return JsonResponse({'code': 0, 'data': arrnew, 'message': '提交成功'})
