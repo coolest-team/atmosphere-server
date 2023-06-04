@@ -52,8 +52,8 @@ def date_of_a_year(year):
 
 
 def get_wind_of_that_day(year, month, day):
-    filename = 'CN-Reanalysis-daily-' + year + month + day + '00.csv'
-    path = "./csv_data/" + year + month + '/'
+    filename = 'CN-Reanalysis-daily-' + year + month.zfill(2) + day.zfill(2) + '00.csv'
+    path = "./csv_data/" + year + month.zfill(2) + '/'
     with open(path + filename, 'r') as daily_file:
         file = path + filename
         u = np.loadtxt(file, skiprows=1, dtype=np.float, delimiter=",", usecols=(6,), encoding='utf-8')
