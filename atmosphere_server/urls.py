@@ -31,5 +31,7 @@ urlpatterns = [
     path('getTimeline/', views.getTimeline),
     path('getProvinceMap/',views.getProvinceMap),
     path('getCityMap/',views.getCityMap),
-    path('getPrediction/',views.getPrediction)
+    path('getPrediction/',views.getPrediction),
+    path('getProvinceTempa/', views.getProvinceTempa),
+    path('getCityTempa/', views.getCityTempa),
 ]

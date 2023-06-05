@@ -4,6 +4,8 @@ from django.shortcuts import render, HttpResponse
 from django.http import JsonResponse
 from app.utils import *
 
+import datetime
+
 
 # Create your views here.
 
@@ -210,7 +212,120 @@ def getCityGauge(request):
                         arrnew = [AQI, pm2p5, pm10, so2, no2, co, o3, u, v, temp, rh, psfc]
                         break
     return JsonResponse({'code': 0, 'data': arrnew, 'message': '提交成功'})
-
+#for 右下角
+def getProvinceTempa(request):
+    date = request.GET.get("date")
+    basedate = datetime.datetime.strptime(date, '%Y-%m-%d')
+    date1 = (basedate + datetime.timedelta(days=-1)).strftime("%Y-%m-%d")  # 获取当前日期的前一天日期
+    date2 = (basedate + datetime.timedelta(days=-1)).strftime("%Y-%m-%d")
+    date3 = (basedate + datetime.timedelta(days=-1)).strftime("%Y-%m-%d")
+    date4 = (basedate + datetime.timedelta(days=-1)).strftime("%Y-%m-%d")
+    date5 = (basedate + datetime.timedelta(days=-1)).strftime("%Y-%m-%d")
+    date6 = (basedate + datetime.timedelta(days=-1)).strftime("%Y-%m-%d")
+    province = request.GET.get("province")
+    path = "./province_daily_data/"
+    files = os.listdir(path)
+    l0=[]
+    l1 = []
+    l2 = []
+    l3 = []
+    l4 = []
+    l5 = []
+    l6 = []
+    l7 = []
+    for file in files:
+        if province in file:
+            with open(path + file, 'r') as province_file:
+                province_data = json.load(province_file)
+                for key in range(len(province_data)):
+                    if date == province_data[key]['date']:
+                        AQI = province_data[key]["AQI"]
+                        temp = province_data[key]['TEMP']
+                        l0=[AQI, temp]
+                    if date1 == province_data[key]['date']:
+                        AQI = province_data[key]["AQI"]
+                        temp = province_data[key]['TEMP']
+                        l1=[AQI, temp]
+                    if date2 == province_data[key]['date']:
+                        AQI = province_data[key]["AQI"]
+                        temp = province_data[key]['TEMP']
+                        l2=[AQI, temp]
+                    if date3 == province_data[key]['date']:
+                        AQI = province_data[key]["AQI"]
+                        temp = province_data[key]['TEMP']
+                        l3=[AQI, temp]
+                    if date4 == province_data[key]['date']:
+                        AQI = province_data[key]["AQI"]
+                        temp = province_data[key]['TEMP']
+                        l4=[AQI, temp]
+                    if date5 == province_data[key]['date']:
+                        AQI = province_data[key]["AQI"]
+                        temp = province_data[key]['TEMP']
+                        l5=[AQI, temp]
+                    if date6 == province_data[key]['date']:
+                        AQI = province_data[key]["AQI"]
+                        temp = province_data[key]['TEMP']
+                        l6=[AQI, temp]
+                arrnew = [l6,l5,l4,l3,l2,l1,l0]
+                print(arrnew)
+    return JsonResponse({'code': 0, 'data': arrnew, 'message': '提交成功'})
+#for 右下角
+def getCityTempa(request):
+    date = request.GET.get("date")
+    basedate = datetime.datetime.strptime(date, '%Y-%m-%d')
+    date1 = (basedate + datetime.timedelta(days=-1)).strftime("%Y-%m-%d")  # 获取当前日期的前一天日期
+    date2 = (basedate + datetime.timedelta(days=-1)).strftime("%Y-%m-%d")
+    date3 = (basedate + datetime.timedelta(days=-1)).strftime("%Y-%m-%d")
+    date4 = (basedate + datetime.timedelta(days=-1)).strftime("%Y-%m-%d")
+    date5 = (basedate + datetime.timedelta(days=-1)).strftime("%Y-%m-%d")
+    date6 = (basedate + datetime.timedelta(days=-1)).strftime("%Y-%m-%d")
+    city = request.GET.get("city")
+    path = "./city_daily_data/"
+    files = os.listdir(path)
+    l0 = []
+    l1 = []
+    l2 = []
+    l3 = []
+    l4 = []
+    l5 = []
+    l6 = []
+    l7 = []
+    for file in files:
+        if city in file:
+            with open(path + file, 'r') as city_file:
+                city_data = json.load(city_file)
+                for key in range(len(city_data)):
+                    if date == city_data[key]['date']:
+                        AQI = city_data[key]["AQI"]
+                        temp = city_data[key]['TEMP']
+                        l0 = [AQI, temp]
+                    if date1 == city_data[key]['date']:
+                        AQI = city_data[key]["AQI"]
+                        temp = city_data[key]['TEMP']
+                        l1 = [AQI, temp]
+                    if date2 == city_data[key]['date']:
+                        AQI = city_data[key]["AQI"]
+                        temp = city_data[key]['TEMP']
+                        l2 = [AQI, temp]
+                    if date3 == city_data[key]['date']:
+                        AQI = city_data[key]["AQI"]
+                        temp = city_data[key]['TEMP']
+                        l3 = [AQI, temp]
+                    if date4 == city_data[key]['date']:
+                        AQI = city_data[key]["AQI"]
+                        temp = city_data[key]['TEMP']
+                        l4 = [AQI, temp]
+                    if date5 == city_data[key]['date']:
+                        AQI = city_data[key]["AQI"]
+                        temp = city_data[key]['TEMP']
+                        l5 = [AQI, temp]
+                    if date6 == city_data[key]['date']:
+                        AQI = city_data[key]["AQI"]
+                        temp = city_data[key]['TEMP']
+                        l6 = [AQI, temp]
+                arrnew = [l6, l5, l4, l3, l2, l1, l0]
+                print(arrnew)
+    return JsonResponse({'code': 0, 'data': arrnew, 'message': '提交成功'})
 # for时间轴面板
 # 获取全年各省的污染等级
 def getTimeline(request):
